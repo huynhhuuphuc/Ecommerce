@@ -13,6 +13,7 @@ GoogleProvider.setCustomParameters({ prompt: "select_account" });
 export const signInWithGoogle = () => auth.signInWithPopup(GoogleProvider);
 
 export const handleUserProfile = async (userAuth, additionalData) => {
+  // Lấy đối tượng xác thực người dùng
   if (!userAuth) return;
   const { uid } = userAuth;
 
@@ -20,10 +21,12 @@ export const handleUserProfile = async (userAuth, additionalData) => {
   const snapshot = await userRef.get();
 
   if (!snapshot.exists) {
+    // Nếu họ không tồn tại
     const { displayName, email } = userAuth;
     const timestamp = new Date();
     try {
       await userRef.set({
+        // Thì tạo 1 tài liệu mới trong firebase và lưu trữ thông tin họ
         displayName,
         email,
         createdDated: timestamp,
