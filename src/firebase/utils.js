@@ -11,7 +11,8 @@ export const firestore = firebase.firestore();
 export const GoogleProvider = new firebase.auth.GoogleAuthProvider();
 GoogleProvider.setCustomParameters({ prompt: "select_account" });
 
-export const handleUserProfile = async (userAuth, additionalData) => {
+export const handleUserProfile = async ({ userAuth, additionalData }) => {
+  // Kiểm tra người dùng có trong firebase chưa
   // Lấy đối tượng xác thực người dùng
   if (!userAuth) return;
   const { uid } = userAuth;
@@ -36,4 +37,13 @@ export const handleUserProfile = async (userAuth, additionalData) => {
     }
   }
   return userRef;
+};
+
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged((userAuth) => {
+      unsubscribe();
+      resolve(userAuth); // Lấy người dùng hiện tại và return đối tượng người dùng đó
+    }, reject);
+  });
 };

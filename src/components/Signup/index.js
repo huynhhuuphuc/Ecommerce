@@ -1,45 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { withRouter } from "react-router";
-import { signUpUser, resetAllAuthForms } from "../../redux/User/user.actions";
+import { useHistory } from "react-router";
+import { signUpUserStart } from "../../redux/User/user.actions";
 import "./styles.scss";
 
 import AuthWrapper from "./../AuthWrapper";
 import FormInput from "../forms/FormInput";
 import Button from "../forms/Button";
 
-// const initialState = {
-//   displayName: "",
-//   email: "",
-//   password: "",
-//   confirmPassword: "",
-//   errors: [],
-// };
-
 const mapState = ({ user }) => ({
-  signUpSuccess: user.signUpSuccess,
-  signUpError: user.signUpError,
+  currentUser: user.currentUser,
+  userErr: user.userErr,
 });
 
 const Signup = (props) => {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     ...initialState,
-  //   };
-
-  //   this.handleChange = this.handleChange.bind(this);
-  // }
-
-  // handleChange(e) {
-  //   const { name, value } = e.target;
-  //   this.setState({
-  //     [name]: value,
-  //   });
-  // }
-
-  const { signUpSuccess, signUpError } = useSelector(mapState);
   const dispatch = useDispatch();
+  const history = useHistory();
+  const { currentUser, userErr } = useSelector(mapState);
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,18 +24,17 @@ const Signup = (props) => {
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
-    if (signUpSuccess) {
+    if (currentUser) {
       reset();
-      dispatch(resetAllAuthForms());
-      props.history.push("/");
+      history.push("/");
     }
-  }, [signUpSuccess]);
+  }, [currentUser]);
 
   useEffect(() => {
-    if (Array.isArray(signUpError) && signUpError.length > 0) {
-      setErrors(signUpError);
+    if (Array.isArray(userErr) && userErr.length > 0) {
+      setErrors(userErr);
     }
-  }, [signUpError]);
+  }, [userErr]);
 
   const reset = () => {
     setDisplayName("");
@@ -71,7 +47,7 @@ const Signup = (props) => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
     dispatch(
-      signUpUser({
+      signUpUserStart({
         displayName,
         email,
         password,
@@ -80,7 +56,6 @@ const Signup = (props) => {
     );
   };
 
-  // const { displayName, email, password, confirmPassword, errors } = this.state;
   const configAuthWrapper = {
     headline: "Register",
   };
@@ -135,4 +110,4 @@ const Signup = (props) => {
   );
 };
 
-export default withRouter(Signup);
+export default Signup;
