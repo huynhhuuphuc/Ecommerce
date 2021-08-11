@@ -19,6 +19,7 @@ export const handleUserProfile = async ({ userAuth, additionalData }) => {
 
   const userRef = firestore.doc(`users/${uid}`);
   const snapshot = await userRef.get();
+  const userRoles = ["user"];
 
   if (!snapshot.exists) {
     // Nếu họ không tồn tại
@@ -30,6 +31,7 @@ export const handleUserProfile = async ({ userAuth, additionalData }) => {
         displayName,
         email,
         createdDated: timestamp,
+        userRoles,
         ...additionalData,
       });
     } catch (err) {

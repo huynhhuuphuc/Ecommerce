@@ -3,8 +3,12 @@ import { useDispatch } from "react-redux";
 import { Switch, Route } from "react-router-dom";
 import { checkUserSession } from "./redux/User/user.actions";
 
+// components
+import AdminToolBar from "./components/AdminToolBar";
+
 // hoc
 import WithAuth from "./hoc/withAuth";
+import WithAdminAuth from "./hoc/withAdminAuth";
 
 // layouts
 import MainLayout from "./layouts/MainLayout";
@@ -16,6 +20,7 @@ import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 import Recovery from "./pages/Recovery";
 import Dashboard from "./pages/Dashboard";
+import Admin from "./pages/Admin";
 import "./default.scss";
 
 const App = (props) => {
@@ -69,11 +74,10 @@ const App = (props) => {
   //   this.authListener();
   // }
 
-  // const { currentUser } = this.props;
-
   return (
     <div className="App">
       <div className="main">
+        <AdminToolBar />
         <Switch>
           <Route
             exact
@@ -124,18 +128,20 @@ const App = (props) => {
               </WithAuth>
             )}
           />
+          <Route
+            path="/admin"
+            render={() => (
+              <WithAdminAuth>
+                <MainLayout>
+                  <Admin />
+                </MainLayout>
+              </WithAdminAuth>
+            )}
+          />
         </Switch>
       </div>
     </div>
   );
 };
-
-// const mapStateToProps = ({ user }) => ({
-//   currentUser: user.currentUser,
-// });
-
-// const mapDispatchToProps = (dispatch) => ({
-//   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-// });
 
 export default App;
