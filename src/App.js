@@ -17,6 +17,7 @@ import AdminLayout from "./layouts/AdminLayout";
 
 // pages
 import Homepage from "./pages/Homepage";
+import Search from "./pages/Search";
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 import Recovery from "./pages/Recovery";
@@ -25,122 +26,78 @@ import Admin from "./pages/Admin";
 import "./default.scss";
 
 const App = (props) => {
-  // authListener = null;
-  // const { setCurrentUser } = props;
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // const { setCurrentUser } = this.props;
-    // const authListener = auth.onAuthStateChanged(async (userAuth) => {
-    //   if (userAuth) {
-    //     const userRef = await handleUserProfile(userAuth);
-    //     userRef.onSnapshot((snapshot) => {
-    //       dispatch(
-    //         setCurrentUser({
-    //           id: snapshot.id,
-    //           ...snapshot.data(),
-    //         })
-    //       ); // when signin/ signout redux update information
-    //     });
-    //   }
-
-    //   dispatch(setCurrentUser(userAuth));
-    // });
-
-    // return () => {
-    //   authListener();
-    // };
     dispatch(checkUserSession());
   }, []);
 
-  // componentDidMount() {
-  //   const { setCurrentUser } = this.props;
-
-  //   this.authListener = auth.onAuthStateChanged(async (userAuth) => {
-  //     if (userAuth) {
-  //       const userRef = await handleUserProfile(userAuth);
-  //       userRef.onSnapshot((snapshot) => {
-  //         setCurrentUser({
-  //           id: snapshot.id,
-  //           ...snapshot.data(),
-  //         }); // when signin/ signout redux update information
-  //       });
-  //     }
-
-  //     setCurrentUser(userAuth);
-  //   });
-  // }
-
-  // componentWillUnmount() {
-  //   this.authListener();
-  // }
-
   return (
     <div className="App">
-      <div className="main">
-        <AdminToolBar />
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() => (
-              <HomepageLayout>
-                <Homepage />
-              </HomepageLayout>
-            )}
-          />
-          <Route
-            path="/registration"
-            render={() => (
-              // currentUser ? (
-              //   <Redirect to="/" />
-              // ) :
+      <AdminToolBar />
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={() => (
+            <HomepageLayout>
+              <Homepage />
+            </HomepageLayout>
+          )}
+        />
+        <Route
+          path="/search"
+          render={() => (
+            <MainLayout>
+              <Search />
+            </MainLayout>
+          )}
+        />
+        <Route
+          path="/registration"
+          render={() => (
+            <MainLayout>
+              <Registration />
+            </MainLayout>
+          )}
+        />
+        <Route
+          path="/login"
+          render={() => (
+            <MainLayout>
+              <Login />
+            </MainLayout>
+          )}
+        />
+        <Route
+          path="/recovery"
+          render={() => (
+            <MainLayout>
+              <Recovery />
+            </MainLayout>
+          )}
+        />
+        <Route
+          path="/dashboard"
+          render={() => (
+            <WithAuth>
               <MainLayout>
-                <Registration />
+                <Dashboard />
               </MainLayout>
-            )}
-          />
-          <Route
-            path="/login"
-            render={() => (
-              // currentUser ? (
-              //   <Redirect to="/" />
-              // ) :
-              <MainLayout>
-                <Login />
-              </MainLayout>
-            )}
-          />
-          <Route
-            path="/recovery"
-            render={() => (
-              <MainLayout>
-                <Recovery />
-              </MainLayout>
-            )}
-          />
-          <Route
-            path="/dashboard"
-            render={() => (
-              <WithAuth>
-                <MainLayout>
-                  <Dashboard />
-                </MainLayout>
-              </WithAuth>
-            )}
-          />
-          <Route
-            path="/admin"
-            render={() => (
-              <WithAdminAuth>
-                <AdminLayout>
-                  <Admin />
-                </AdminLayout>
-              </WithAdminAuth>
-            )}
-          />
-        </Switch>
-      </div>
+            </WithAuth>
+          )}
+        />
+        <Route
+          path="/admin"
+          render={() => (
+            <WithAdminAuth>
+              <AdminLayout>
+                <Admin />
+              </AdminLayout>
+            </WithAdminAuth>
+          )}
+        />
+      </Switch>
     </div>
   );
 };
