@@ -23,6 +23,7 @@ import Login from "./pages/Login";
 import Recovery from "./pages/Recovery";
 import Dashboard from "./pages/Dashboard";
 import Admin from "./pages/Admin";
+import ProductDetails from "./pages/ProductDetails";
 import "./default.scss";
 
 const App = (props) => {
@@ -59,6 +60,14 @@ const App = (props) => {
           render={() => (
             <MainLayout>
               <Search />
+            </MainLayout>
+          )}
+        />
+        <Route
+          path="/product/:productID" // productID: can biet san pham ma nguoi dang co gang truy cap, vi vay moi san pham co moi ID duy nhat
+          render={() => (
+            <MainLayout>
+              <ProductDetails />
             </MainLayout>
           )}
         />

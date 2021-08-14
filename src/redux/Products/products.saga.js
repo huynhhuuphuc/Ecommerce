@@ -1,15 +1,22 @@
 import { auth } from "../../firebase/utils";
 import { takeLatest, put, all, call } from "redux-saga/effects";
-import { setProducts, fetchProductsStart } from "./products.action";
+import { setProducts, setProduct, fetchProductsStart } from "./products.action";
 import {
   handleAddProduct,
   handleFetchProducts,
   handleDeleteProduct,
+  handleFetchProduct,
 } from "./products.help";
 import productsTypes from "./products.types";
 
 export function* addProduct({
-  payload: { productCategory, productName, productThumbnail, productPrice },
+  payload: {
+    productCategory,
+    productName,
+    productThumbnail,
+    productPrice,
+    productDesc,
+  },
 }) {
   try {
     const timestamp = new Date();
@@ -18,6 +25,7 @@ export function* addProduct({
       productName,
       productThumbnail,
       productPrice,
+      productDesc,
       productAdminUserUID: auth.currentUser.uid, // cung cap UID cua nguoi dung da dang nhap
       createdDate: timestamp,
     });
@@ -57,10 +65,24 @@ export function* onDeleteProductStart() {
   yield takeLatest(productsTypes.DELETE_PRODUCT_START, deleteProduct);
 }
 
+export function* fetchProduct({ payload }) {
+  try {
+    const product = yield handleFetchProduct(payload);
+    yield put(setProduct(product)); // gởi hanh dong moi trong redux
+  } catch (err) {
+    // console.log(err);
+  }
+}
+
+export function* onFetchProductStart() {
+  yield takeLatest(productsTypes.FETCH_PRODUCT_START, fetchProduct);
+}
+
 export default function* productsSaga() {
   yield all([
     call(onAddProductStart),
     call(onFetchProductsStart),
     call(onDeleteProductStart),
+    call(onFetchProductStart),
   ]);
 }

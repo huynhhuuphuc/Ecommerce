@@ -87,7 +87,7 @@ const ProductResults = ({}) => {
           )
             return null;
 
-          const configProduct = { productThumbnail, productName, productPrice };
+          const configProduct = { ...product };
 
           return <Product {...configProduct} />;
         })}
