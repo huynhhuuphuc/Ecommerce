@@ -1,16 +1,18 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { signOutUserStart } from "../../redux/User/user.actions";
+import { selectCartItemsCount } from "../../redux/Cart/cart.selectors";
 import "./styles.scss";
 import { Link } from "react-router-dom";
 
-const mapState = ({ user }) => ({
-  currentUser: user.currentUser,
+const mapState = (state) => ({
+  currentUser: state.user.currentUser,
+  totalNumCartItems: selectCartItemsCount(state),
 });
 
 const Header = (props) => {
   const dispatch = useDispatch();
-  const { currentUser } = useSelector(mapState);
+  const { currentUser, totalNumCartItems } = useSelector(mapState);
 
   const signOut = () => {
     dispatch(signOutUserStart());
@@ -37,27 +39,29 @@ const Header = (props) => {
         </nav>
 
         <div className="callToActions">
-          {currentUser && (
-            <ul>
+          <ul>
+            <li>
+              <Link>Your Cart ({totalNumCartItems})</Link>
+            </li>
+
+            {currentUser && [
               <li>
                 <Link to="/dashboard">My Account</Link>
-              </li>
+              </li>,
               <li>
                 <span onClick={() => signOut()}>LOGOUT</span>
-              </li>
-            </ul>
-          )}
+              </li>,
+            ]}
 
-          {!currentUser && (
-            <ul>
+            {!currentUser && [
               <li>
                 <Link to="/registration">Register</Link>
-              </li>
+              </li>,
               <li>
                 <Link to="/login">Login</Link>
-              </li>
-            </ul>
-          )}
+              </li>,
+            ]}
+          </ul>
         </div>
       </div>
     </header>
